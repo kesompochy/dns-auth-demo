@@ -1,0 +1,17 @@
+{
+  "name": "dns-auth-demo",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "docker compose up -d",
+    "build": "bun build",
+    "restart": "docker compose up -d --force-recreate",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,63 @@
+---
+version: "3"
+
+services:
+  registrar-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: registrar
+    container_name: registrar-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./registrar-initdb.d:/docker-entrypoint-initdb.d
+  registrar-service:
+    image: registrar-service
+    build:
+      context: ./registrar-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - registrar-db
+    container_name: bu-bu-domain
+  web-app-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: webapp
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./web-app-initdb.d:/docker-entrypoint-initdb.d
+    container_name: buburi-db
+  web-app-service:
+    image: web-app-service
+    build:
+      context: ./web-app-service
+    ports:
+      - "8081:8080"
+    depends_on:
+      - web-app-db
+    container_name: buburi-app
+  auth-service:
+    image: auth-service
+    build:
+      context: ./auth-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - registrar-db
+      - web-app-db
+    container_name: auth-service
+  dns-server:
+    image: dns-server
+    build:
+      context: ./dns-server
+    ports:
+      - "53:53/udp"
+    container_name: dns-server
+
+volumes:
+  registrar-mysql-data:
+  webapp-mysql-data:
