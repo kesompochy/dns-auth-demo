@@ -57,7 +57,18 @@ services:
     ports:
       - "53:53/udp"
     container_name: dns-server
+  dns-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dns
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./dns-initdb.d:/docker-entrypoint-initdb.d
+    container_name: dns-db
 
 volumes:
   registrar-mysql-data:
   webapp-mysql-data:
+  dns-mysql-data:
