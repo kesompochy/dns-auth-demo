@@ -55,7 +55,7 @@ services:
     build:
       context: ./dns-server
     ports:
-      - "53:53/udp"
+      - "30053:53/udp"
     container_name: dns-server
   dns-db:
     image: mysql:8.0
